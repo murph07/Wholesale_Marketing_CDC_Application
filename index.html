@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parichit Sharma · Application for Café du Cycliste</title>
+<style>
+  :root {
+    --bg-white: #FFFFFF;
+    --bg-light: #F5F5F7;
+    --bg-dark: #1D1D1F;
+    --bg-black: #000000;
+    --text-primary-light: #1D1D1F;
+    --text-secondary-light: #6E6E73;
+    --text-primary-dark: #F5F5F7;
+    --text-secondary-dark: #A1A1A6;
+    --accent-blue: #0071E3;
+    --accent-navy: #1D3557;
+    --accent-navy-light: #2B5797;
+    --accent-blue-soft: #5E9EFF;
+    --divider-light: rgba(0,0,0,0.1);
+    --divider-dark: rgba(255,255,255,0.1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg-white);
+    color: var(--text-primary-light);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 48px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    font-size: 14px;
+  }
+
+  .nav-name {
+    font-weight: 600;
+    color: var(--text-primary-light);
+    letter-spacing: -0.01em;
+  }
+
+  .nav-name span {
+    font-weight: 400;
+    color: var(--accent-navy-light);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text-secondary-light);
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent-blue); }
+
+  /* SECTIONS */
+  section { padding: 100px 24px; }
+
+  .section-content {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  .section-content.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-navy);
+    margin-bottom: 16px;
+    display: block;
+    text-align: center;
+  }
+
+  .eyebrow-dark {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #86868B;
+    margin-bottom: 16px;
+    display: block;
+    text-align: center;
+  }
+
+  .section-heading {
+    font-size: 44px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.08;
+    color: var(--text-primary-light);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .section-heading-dark {
+    font-size: 44px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.08;
+    color: var(--text-primary-dark);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .section-subheading {
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1.38;
+    color: var(--text-secondary-light);
+    margin-bottom: 64px;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .section-subheading-dark {
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1.38;
+    color: var(--text-secondary-dark);
+    margin-bottom: 64px;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .body-text {
+    font-size: 17px;
+    line-height: 1.58;
+    color: var(--text-secondary-light);
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .body-text-dark {
+    font-size: 17px;
+    line-height: 1.58;
+    color: var(--text-secondary-dark);
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .text-blue-light { color: var(--accent-navy-light); }
+  .text-blue-dark { color: var(--accent-blue-soft); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: var(--bg-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px 60px;
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #5E9EFF;
+    border: 1px solid rgba(94, 158, 255, 0.35);
+    border-radius: 980px;
+    padding: 8px 20px;
+    display: inline-block;
+    margin-bottom: 32px;
+  }
+
+  .hero h1 {
+    font-size: 68px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+    color: #F5F5F7;
+    margin-bottom: 24px;
+  }
+
+  .hero-subtitle {
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #A1A1A6;
+    max-width: 600px;
+    margin-bottom: 48px;
+  }
+
+  .cta-group {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background: var(--accent-blue);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 980px;
+    font-size: 17px;
+    font-weight: 400;
+    text-decoration: none;
+    transition: background 0.3s ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .cta-button:hover { background: #0077ED; }
+
+  .cta-outline {
+    display: inline-block;
+    color: var(--accent-blue-soft);
+    padding: 12px 24px;
+    border-radius: 980px;
+    font-size: 17px;
+    font-weight: 400;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .cta-outline:hover { text-decoration: underline; }
+
+  /* LIGHT SECTION */
+  .light { background: var(--bg-white); }
+  .light-alt { background: var(--bg-light); }
+  .dark { background: var(--bg-dark); }
+  .black { background: var(--bg-black); }
+
+  /* INSIGHT CARDS */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .insight-card {
+    background: var(--bg-light);
+    border-radius: 18px;
+    padding: 36px 28px;
+    text-align: left;
+  }
+
+  .dark .insight-card {
+    background: rgba(255,255,255,0.06);
+  }
+
+  .insight-badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-blue-soft);
+    background: rgba(94, 158, 255, 0.12);
+    border-radius: 980px;
+    padding: 4px 12px;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+
+  .insight-badge-green {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #34C759;
+    background: rgba(52, 199, 89, 0.12);
+    border-radius: 980px;
+    padding: 4px 12px;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+
+  .insight-badge-amber {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #FF9F0A;
+    background: rgba(255, 159, 10, 0.12);
+    border-radius: 980px;
+    padding: 4px 12px;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+
+  .insight-card h3 {
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    line-height: 1.24;
+    color: var(--text-primary-light);
+    margin-bottom: 12px;
+  }
+
+  .dark .insight-card h3 { color: var(--text-primary-dark); }
+
+  .insight-card p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-secondary-light);
+  }
+
+  .dark .insight-card p { color: var(--text-secondary-dark); }
+
+  /* FIT GRID */
+  .fit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 48px;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .fit-cell {
+    background: var(--bg-light);
+    padding: 36px 32px;
+  }
+
+  .fit-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-navy);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .fit-title {
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--text-primary-light);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .fit-proof {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-secondary-light);
+  }
+
+  /* 90 DAYS */
+  .move-list {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .move-item {
+    background: rgba(255,255,255,0.05);
+    padding: 36px 40px;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .move-number {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--accent-blue-soft);
+    opacity: 0.5;
+    line-height: 1;
+    padding-top: 4px;
+  }
+
+  .move-content {}
+
+  .move-name {
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--text-primary-dark);
+    margin-bottom: 6px;
+  }
+
+  .move-insight {
+    font-size: 13px;
+    color: var(--accent-blue-soft);
+    letter-spacing: 0.03em;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+
+  .move-desc {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-secondary-dark);
+  }
+
+  .move-impact {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #34C759;
+    background: rgba(52, 199, 89, 0.12);
+    border-radius: 980px;
+    padding: 4px 12px;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    margin-top: 48px;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 32px;
+    padding: 28px 0;
+    border-top: 1px solid var(--divider-light);
+  }
+
+  .timeline-date {
+    color: var(--text-secondary-light);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-top: 4px;
+  }
+
+  .timeline-content h3 {
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-primary-light);
+  }
+
+  .timeline-content .company {
+    font-size: 14px;
+    color: var(--accent-navy-light);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .timeline-content p {
+    font-size: 15px;
+    line-height: 1.58;
+    color: var(--text-secondary-light);
+  }
+
+  /* CONTACT */
+  .contact-section {
+    background: var(--bg-black);
+    text-align: center;
+  }
+
+  .contact-section .section-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* SCROLL ANIMATION */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .delay-1 { transition-delay: 0.1s; }
+  .delay-2 { transition-delay: 0.2s; }
+  .delay-3 { transition-delay: 0.3s; }
+  .delay-4 { transition-delay: 0.4s; }
+
+  /* CREDENTIALS ROW */
+  .cred-row {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+
+  .cred-item {
+    text-align: center;
+  }
+
+  .cred-number {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary-dark);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .cred-label {
+    font-size: 14px;
+    color: var(--text-secondary-dark);
+    max-width: 140px;
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    width: 48px;
+    height: 2px;
+    background: var(--divider-light);
+    margin: 0 auto 48px;
+  }
+
+  .section-divider-dark {
+    width: 48px;
+    height: 2px;
+    background: var(--divider-dark);
+    margin: 0 auto 48px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 734px) {
+    .hero h1 { font-size: 36px; }
+    .hero-subtitle { font-size: 18px; }
+    .section-heading, .section-heading-dark { font-size: 30px; }
+    .section-subheading, .section-subheading-dark { font-size: 17px; }
+    section { padding: 64px 24px; }
+    .fit-grid { grid-template-columns: 1fr; }
+    .timeline-item { grid-template-columns: 1fr; gap: 8px; }
+    .move-item { grid-template-columns: 1fr; }
+    .move-number { font-size: 24px; }
+    .nav-links { display: none; }
+    .cred-row { gap: 24px; }
+  }
+
+  @media (min-width: 735px) and (max-width: 1068px) {
+    .hero h1 { font-size: 52px; }
+    .section-heading, .section-heading-dark { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-name">Parichit Sharma <span>· Application for Café du Cycliste</span></span>
+  <ul class="nav-links">
+    <li><a href="#business">The Brand</a></li>
+    <li><a href="#fit">My Fit</a></li>
+    <li><a href="#90days">90 Days</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-eyebrow">Job Application — Wholesale Marketing &amp; Operations Specialist · Café du Cycliste · Nice</span>
+    <h1>I ride these roads.<br>Let me help you <span style="color:#5E9EFF;">own them.</span></h1>
+    <p class="hero-subtitle">Col de Porte. Col des Aravis. La Forclaz. Combe Laval. A career running joint marketing campaigns for 30+ partners across EMEA. This terrain, on and off the bike.</p>
+    <div class="cta-group">
+      <a href="#fit" class="cta-button">See why I fit</a>
+      <a href="#contact" class="cta-outline">Get in touch ↓</a>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT I KNOW ABOUT THE BRAND -->
+<section class="light" id="business">
+  <div class="section-content centered">
+    <span class="eyebrow animate-on-scroll">What I know about your brand</span>
+    <h2 class="section-heading animate-on-scroll">Not just a brand.<br>A <span class="text-blue-light">point of view</span>.</h2>
+    <p class="section-subheading animate-on-scroll">Founded on the Côte d'Azur in 2009. Five flagships, nine markets, B-Corp certified. A brand that means what it says.</p>
+    <div class="section-divider"></div>
+    <div class="insight-grid" style="width:100%;">
+      <div class="insight-card animate-on-scroll delay-1">
+        <span class="insight-badge">Growth Signal</span>
+        <h3>Two new stores in 2025.</h3>
+        <p>Paris and Munich both opened this year. That kind of retail expansion puts real pressure on wholesale brand consistency — partners need coordinated activation, not just product drops.</p>
+      </div>
+      <div class="insight-card animate-on-scroll delay-2">
+        <span class="insight-badge-green">Brand Depth</span>
+        <h3>Six collections. One identity.</h3>
+        <p>Classic, Race, Audax, Outlands, Active, Explore — each with its own positioning. Wholesale partners carrying different collections need different activation support. The Audax customer and the Race customer are not the same person.</p>
+      </div>
+      <div class="insight-card animate-on-scroll delay-3">
+        <span class="insight-badge-amber">Culture Fit</span>
+        <h3>B-Corp. 1% for the Planet. Recycliste.</h3>
+        <p>These are structural commitments, not marketing copy. I spent four years at an envirotech company and won a London Business School impact award. It shapes how I'd approach partner communications.</p>
+      </div>
+      <div class="insight-card animate-on-scroll delay-4">
+        <span class="insight-badge">Market Intel</span>
+        <h3>The wholesale challenge in premium cycling.</h3>
+        <p>Specialist bike shops want brand storytelling. Fashion and multi-sport retailers want simplified kits and seasonal calendars. Café du Cycliste sits across both — and needs someone who can translate the brand into different retail languages.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPETITOR LANDSCAPE -->
+<section class="dark">
+  <div class="section-content centered">
+    <span class="eyebrow-dark animate-on-scroll">The landscape you play in</span>
+    <h2 class="section-heading-dark animate-on-scroll">The market is <span class="text-blue-dark">crowded</span>.<br>The opportunity is real.</h2>
+    <p class="section-subheading-dark animate-on-scroll">Café du Cycliste occupies a specific position — premium, craft, values-led — that most competitors either can't reach or can't sustain. Here's what that means in practice.</p>
+    <div class="section-divider-dark"></div>
+    <div class="insight-grid" style="width:100%;">
+      <div class="insight-card animate-on-scroll delay-1">
+        <span class="insight-badge">Competitor</span>
+        <h3>Rapha</h3>
+        <p>Strong wholesale presence, but perceived as increasingly corporate after LVMH involvement. Café du Cycliste's independence and community identity — the Nice roots, the Outsiders ethos — is a real differentiator for wholesale partners who want to carry something with genuine character.</p>
+      </div>
+      <div class="insight-card animate-on-scroll delay-2">
+        <span class="insight-badge">Competitor</span>
+        <h3>Pas Normal Studios</h3>
+        <p>Strong design identity and growing wholesale network in Scandinavia and Germany. High-quality partner assets. The opportunity for CdC: seasonal activation toolkits that link to the collection narrative — Outlands, Audax — and actually support in-store sell-through, not just brand imagery.</p>
+      </div>
+      <div class="insight-card animate-on-scroll delay-3">
+        <span class="insight-badge">Opportunity</span>
+        <h3>Where the gap sits</h3>
+        <p>Most premium cycling brands ship product and PDFs. The brands that win at wholesale build co-marketing programs around events, seasonal content, and community. CdC already has Caravan, The Grip, and the Outsiders Club. That infrastructure can be packaged for wholesale partners to use.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY I FIT -->
+<section class="light-alt" id="fit">
+  <div class="section-content centered">
+    <span class="eyebrow animate-on-scroll">Why I'm built for this</span>
+    <h2 class="section-heading animate-on-scroll">Every requirement.<br><span class="text-blue-light">Direct proof.</span></h2>
+    <p class="section-subheading animate-on-scroll">This isn't a career pivot. It's a direct match between what the role needs and what I've done — in environments at least as complex as this one.</p>
+    <div class="fit-grid" style="width:100%;">
+      <div class="fit-cell animate-on-scroll">
+        <span class="fit-label">Role Requirement</span>
+        <div class="fit-title">Joint marketing campaigns with wholesale partners</div>
+        <div class="fit-proof">At Global Blue, I ran joint marketing campaigns with 30+ enterprise retail partners across six EMEA wholesale channels. Drove €250K incremental revenue at +24.6% ROI across Google Ads, LinkedIn, email, and in-product placements.</div>
+      </div>
+      <div class="fit-cell animate-on-scroll delay-1">
+        <span class="fit-label">Role Requirement</span>
+        <div class="fit-title">POS materials and seasonal activation planning</div>
+        <div class="fit-proof">At Upfluence, I led trade marketing for 23 product feature launches — campaign toolkits, brand assets, and sales enablement materials for 73 enterprise clients across Europe and APAC.</div>
+      </div>
+      <div class="fit-cell animate-on-scroll delay-2">
+        <span class="fit-label">Role Requirement</span>
+        <div class="fit-title">Partner account operations and dashboards</div>
+        <div class="fit-proof">Built 15 multi-market dashboards at Global Blue tracking budget pacing, ROAS, and CPA across 30+ enterprise retail accounts. Sales and regional teams used these for day-to-day partner visibility.</div>
+      </div>
+      <div class="fit-cell animate-on-scroll delay-3">
+        <span class="fit-label">Role Requirement</span>
+        <div class="fit-title">Brand consistency across wholesale channels</div>
+        <div class="fit-proof">Developed seasonal activation content for Chanel and Prada partner networks at Global Blue — improving partner engagement by 19% across 1,324 onboarded users across EMEA.</div>
+      </div>
+      <div class="fit-cell animate-on-scroll">
+        <span class="fit-label">Nice to Have</span>
+        <div class="fit-title">Passion for cycling</div>
+        <div class="fit-proof">Col de Porte, Col de Coq, Gorges de la Bourne, Combe Laval, Col des Aravis, La Forclaz above Annecy. Regular rides over the last three years through the Chartreuse, Vercors, Belledonne, and Aravis.</div>
+      </div>
+      <div class="fit-cell animate-on-scroll delay-1">
+        <span class="fit-label">Cross-functional</span>
+        <div class="fit-title">Marketing, Sales and Product coordination</div>
+        <div class="fit-proof">At Global Blue, I worked directly with Sales and Product to deploy POS-integrated retail solutions — translating technical products into clear partner-facing communications across boutique networks.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 90 DAYS -->
+<section class="dark" id="90days">
+  <div class="section-content centered">
+    <span class="eyebrow-dark animate-on-scroll">Three moves I'd explore in the first 90 days</span>
+    <h2 class="section-heading-dark animate-on-scroll">Where I'd start.<br>First <span class="text-blue-dark">90 days.</span></h2>
+    <p class="section-subheading-dark animate-on-scroll">These can be starting points. The actual priorities would come from listening to the team and partners first.</p>
+    <div class="move-list" style="width:100%;">
+      <div class="move-item animate-on-scroll">
+        <div class="move-number">01</div>
+        <div class="move-content">
+          <div class="move-name">Map the partner activation gap</div>
+          <div class="move-insight">Insight: Partners who receive both product and activation support sell through at higher rates than those who receive product alone.</div>
+          <div class="move-desc">Before proposing anything, I'd audit what wholesale partners currently receive — asset quality, seasonal calendars, co-marketing support — and where the gaps are compared to what competitors offer. A clear baseline makes future investment decisions easier to justify.</div>
+          <span class="move-impact">Output: Activation audit within 30 days</span>
+        </div>
+      </div>
+      <div class="move-item animate-on-scroll delay-1">
+        <div class="move-number">02</div>
+        <div class="move-content">
+          <div class="move-name">Build seasonal content kits per collection</div>
+          <div class="move-insight">Insight: The six collection identities are strong but underused in wholesale. Partners default to generic brand imagery because it's the easiest thing to deploy.</div>
+          <div class="move-desc">Working with the Brand & Activation Manager, I'd develop modular toolkits for each collection — POS layouts, social templates, in-store guides — that partners can localise without losing the brand voice. Ready-to-deploy, not request-based.</div>
+          <span class="move-impact">Output: First toolkit live for SS26 season</span>
+        </div>
+      </div>
+      <div class="move-item animate-on-scroll delay-2">
+        <div class="move-number">03</div>
+        <div class="move-content">
+          <div class="move-name">Connect community assets to wholesale activation</div>
+          <div class="move-insight">Insight: Café du Cycliste has an active riding community — Outsiders Club, Caravan, The Grip — that generates real content. Wholesale partners rarely get to use any of it.</div>
+          <div class="move-desc">I'd explore a lightweight program where key wholesale partners, particularly specialist bike shops, can co-brand with local CdC ride events or community content. It gives partners a reason to feature the brand year-round, not just at product launch.</div>
+          <span class="move-impact">Output: Pilot with 2–3 key partners, Q3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BIO + EXPERIENCE -->
+<section class="light" id="experience">
+  <div class="section-content centered">
+    <span class="eyebrow animate-on-scroll">Quick bio + credentials</span>
+    <h2 class="section-heading animate-on-scroll">Marketing professional.<br>MSc from <span class="text-blue-light">Grenoble EM</span>.</h2>
+    <p class="section-subheading animate-on-scroll">Four years across B2B SaaS, luxury retail wholesale, and envirotech. MSc from Grenoble EM. Fully authorised to work in France.</p>
+    <div class="cred-row animate-on-scroll">
+      <div class="cred-item">
+        <div class="cred-number" style="color: var(--accent-navy-light);">30+</div>
+        <div class="cred-label" style="color:var(--text-secondary-light);">EMEA wholesale partners managed at Global Blue</div>
+      </div>
+      <div class="cred-item">
+        <div class="cred-number" style="color: var(--accent-navy-light);">€250K</div>
+        <div class="cred-label" style="color:var(--text-secondary-light);">Incremental revenue from partner campaigns</div>
+      </div>
+      <div class="cred-item">
+        <div class="cred-number" style="color: var(--accent-navy-light);">23</div>
+        <div class="cred-label" style="color:var(--text-secondary-light);">Product launches supported with marketing toolkits</div>
+      </div>
+      <div class="cred-item">
+        <div class="cred-number" style="color: var(--accent-navy-light);">15</div>
+        <div class="cred-label" style="color:var(--text-secondary-light);">Multi-market dashboards built for wholesale visibility</div>
+      </div>
+    </div>
+    <div class="section-divider" style="margin-top:64px;"></div>
+    <div class="timeline" style="width:100%;">
+      <div class="timeline-item animate-on-scroll">
+        <div class="timeline-date">2025 · Present</div>
+        <div class="timeline-content">
+          <h3>Marketing & Growth Strategy Consultant</h3>
+          <div class="company">Emergence Software · Paris</div>
+          <p>Built marketing performance dashboards tracking 8 acquisition and engagement metrics across 4 B2B software clients. Rebuilt go-to-market messaging and brand positioning for portfolio companies, growing qualified monthly engagement by +200%.</p>
+        </div>
+      </div>
+      <div class="timeline-item animate-on-scroll delay-1">
+        <div class="timeline-date">Feb – May 2025</div>
+        <div class="timeline-content">
+          <h3>Associate Digital Marketing Manager</h3>
+          <div class="company">Global Blue · Paris</div>
+          <p>Joint marketing campaigns with 30+ enterprise retail partners across 6 EMEA wholesale channels. €250K incremental revenue at +24.6% ROI. Seasonal activation for Chanel and Prada partners. 15 multi-market dashboards for Sales and regional teams.</p>
+        </div>
+      </div>
+      <div class="timeline-item animate-on-scroll delay-2">
+        <div class="timeline-date">Mar – Oct 2024</div>
+        <div class="timeline-content">
+          <h3>Associate Product Marketing Manager</h3>
+          <div class="company">Upfluence · Lyon</div>
+          <p>Trade marketing launch planning for 23 product features. 21+ marketing assets for 73 enterprise clients across France and APAC. +25% content engagement. +€160K quarterly revenue improvement.</p>
+        </div>
+      </div>
+      <div class="timeline-item animate-on-scroll delay-3">
+        <div class="timeline-date">2019 – 2023</div>
+        <div class="timeline-content">
+          <h3>Product & Growth Marketing Manager</h3>
+          <div class="company">ARTH · New Delhi</div>
+          <p>Full-funnel campaigns across 200 sq. km in 11 months. NGO and public-sector partnerships. London Business School Real Innovation Award winner.</p>
+        </div>
+      </div>
+      <div class="timeline-item animate-on-scroll">
+        <div class="timeline-date">2022 – 2025</div>
+        <div class="timeline-content">
+          <h3>MSc Marketing Management</h3>
+          <div class="company">Grenoble École de Management</div>
+          <p>Digital Marketing, Brand & Product Communication, Market Intelligence, SEO, SEM.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="section-content">
+    <span class="hero-eyebrow animate-on-scroll" style="margin-bottom:24px;">Ready when you are</span>
+    <h2 class="section-heading-dark animate-on-scroll" style="max-width:600px;margin:0 auto 16px;">Let's talk about<br>what's next for <span class="text-blue-dark">Café du Cycliste.</span></h2>
+    <p class="section-subheading-dark animate-on-scroll">Happy to talk through any of this in more detail — over a call or in person in Nice.</p>
+    <div class="cta-group animate-on-scroll" style="margin-top:8px;">
+      <a id="email-link" class="cta-button">Send a message</a>
+      <a href="https://linkedin.com/in/parichit" target="_blank" class="cta-outline">LinkedIn ↗</a>
+    </div>
+    <p style="margin-top:32px; font-size:14px; color:#6E6E73;">+33 7 52 98 35 75 · Nice, France · Authorised to work in France</p>
+  </div>
+</section>
+
+<script>
+  // Cloudflare-safe email obfuscation
+  (function() {
+    const u = 'sparichit6';
+    const d = 'gmail.com';
+    const el = document.getElementById('email-link');
+    if (el) {
+      el.href = 'mailto:' + u + '@' + d;
+    }
+  })();
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.animate-on-scroll').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
